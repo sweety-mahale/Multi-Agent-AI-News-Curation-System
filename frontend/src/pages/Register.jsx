@@ -51,9 +51,28 @@ export default function Register() {
   return (
     <div className="auth-page">
       <div className="auth-card" style={{ maxWidth: 480 }}>
-        <div className="auth-logo">
-          <div className="auth-logo-icon">⚡</div>
-          <span className="auth-logo-text">AI Digest</span>
+        <div className="auth-logo" style={{ display: 'flex', alignItems: 'center', gap: 12, justifyContent: 'center' }}>
+          <div className="auth-logo-svg" style={{ display: 'flex', alignItems: 'center' }}>
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="registerLogoGrad" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stopColor="var(--primary)" />
+                  <stop offset="100%" stopColor="var(--accent)" />
+                </linearGradient>
+              </defs>
+              <circle cx="12" cy="12" r="9" stroke="url(#registerLogoGrad)" strokeWidth="1.5" strokeDasharray="3 3" />
+              <circle cx="12" cy="12" r="3" fill="url(#registerLogoGrad)" />
+              <circle cx="6" cy="12" r="1.5" fill="url(#registerLogoGrad)" />
+              <circle cx="18" cy="12" r="1.5" fill="url(#registerLogoGrad)" />
+              <circle cx="12" cy="6" r="1.5" fill="url(#registerLogoGrad)" />
+              <circle cx="12" cy="18" r="1.5" fill="url(#registerLogoGrad)" />
+              <line x1="8.5" y1="12" x2="9.5" y2="12" stroke="url(#registerLogoGrad)" strokeWidth="1" />
+              <line x1="14.5" y1="12" x2="15.5" y2="12" stroke="url(#registerLogoGrad)" strokeWidth="1" />
+              <line x1="12" y1="8.5" x2="12" y2="9.5" stroke="url(#registerLogoGrad)" strokeWidth="1" />
+              <line x1="12" y1="14.5" x2="12" y2="15.5" stroke="url(#registerLogoGrad)" strokeWidth="1" />
+            </svg>
+          </div>
+          <span className="auth-logo-text" style={{ fontSize: 18, fontWeight: 800 }}>AI News Curator</span>
         </div>
         <h1 className="auth-title">{step === 1 ? 'Create account' : 'Set your interests'}</h1>
         <p className="auth-subtitle">
