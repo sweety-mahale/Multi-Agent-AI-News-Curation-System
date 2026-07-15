@@ -18,7 +18,7 @@ services:
       - key: APP_PASSWORD
         sync: false
 
-  # ── 2. React SPA Frontend ───────────────────────────────────────
+  # ── 2. React SPA Frontend (Static Site) ─────────────────────────
   - type: web
     name: ai-news-curator-frontend
     env: static
@@ -26,7 +26,4 @@ services:
     staticPublishPath: ./frontend/dist
     envVars:
       - key: VITE_API_URL
-        fromService:
-          type: web
-          name: ai-news-curator-backend
-          property: url
+        sync: false
