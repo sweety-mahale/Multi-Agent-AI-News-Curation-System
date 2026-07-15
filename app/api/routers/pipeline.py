@@ -19,7 +19,25 @@ class PipelineRunResponse(BaseModel):
 def _run_pipeline_background(user_id: str):
     """Background task: runs per-user curation + email pipeline."""
     from app.pipeline.user_runner import run_user_pipeline
+    from app.pipeline.global_runner import run_global_pipeline
+    from app.database.connection import get_session
+    from app.database.models import ArticleSummary
+    
     logger.info(f"[PIPELINE] Manual trigger for user {user_id}")
+    
+    # Self-healing: if database is completely empty, scrape globally first
+    session = get_session()
+    try:
+        summary_count = session.query(ArticleSummary).count()
+        if summary_count == 0:
+            logger.info("[PIPELINE] Database contains 0 summaries. Launching global scrape...")
+            run_global_pipeline(hours=24)
+            logger.info("[PIPELINE] Global scrape finished. Proceeding with user curation...")
+    except Exception as e:
+        logger.error(f"[PIPELINE] Error running self-healing global scrape: {e}")
+    finally:
+        session.close()
+
     result = run_user_pipeline(user_id, hours=180)
     if result.get("success"):
         logger.info(f"[PIPELINE] User {user_id}: sent {result.get('articles_sent', 0)} articles")
