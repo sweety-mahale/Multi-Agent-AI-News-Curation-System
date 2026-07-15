@@ -47,14 +47,23 @@ app = FastAPI(
 )
 
 # ── CORS ─────────────────────────────────────────────────────
-# Allow the React frontend (dev: port 5173, prod: same domain)
+# Allow the React frontend (dev & production endpoints)
+import os
+
+allowed_origins = [
+    "http://localhost:5173",  # Vite dev server
+    "http://localhost:3000",  # CRA dev server
+    "http://127.0.0.1:5173",
+    "https://ai-news-curator-frontend.onrender.com",  # Production Render static site
+]
+
+env_origins = os.getenv("ALLOWED_ORIGINS")
+if env_origins:
+    allowed_origins.extend([o.strip() for o in env_origins.split(",")])
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",  # Vite dev server
-        "http://localhost:3000",  # CRA dev server
-        "http://127.0.0.1:5173",
-    ],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
