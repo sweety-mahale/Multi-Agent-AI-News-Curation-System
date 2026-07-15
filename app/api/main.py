@@ -1,3 +1,6 @@
+import logging
+import alembic.config
+import alembic.command
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -5,10 +8,20 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.routers import auth, users, sources, digests, pipeline
 from app.pipeline.scheduler import start_scheduler, stop_scheduler
 
+logger = logging.getLogger(__name__)
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Start scheduler on startup, shut it down cleanly on exit."""
+    """Run database migrations and start/stop scheduler on startup/shutdown."""
+    try:
+        logger.info("Initializing database migrations...")
+        alembic_cfg = alembic.config.Config("alembic.ini")
+        alembic.command.upgrade(alembic_cfg, "head")
+        logger.info("Database migrations successfully executed.")
+    except Exception as e:
+        logger.error(f"Error executing database migrations on startup: {e}")
+
     start_scheduler()
     yield
     stop_scheduler()

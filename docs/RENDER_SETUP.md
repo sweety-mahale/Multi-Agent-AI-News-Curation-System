@@ -44,20 +44,16 @@ While the services are building, configure the necessary keys in the **Render Da
 
 ---
 
-## 📁 Migration Setup (First-Time Deploy)
+## 📁 Migration Setup (Automated)
 
-Once the backend service successfully builds and is online, you must initialize the 9 database tables on your Supabase instance:
+You do **not** need an interactive shell to run migrations. We have integrated database migrations directly into the backend startup sequence:
 
-1.  In the Render Dashboard, select the **`ai-news-curator-backend`** Web Service.
-2.  Click the **Shell** tab on the left menu to open a terminal inside the running container.
-3.  Run the migration command to construct the tables:
-    ```bash
-    uv run alembic upgrade head
-    ```
-4.  Verify that your tables exist and are reachable:
-    ```bash
-    uv run python -m app.database.check_connection
-    ```
+1. When the backend web service starts up for the first time (or restarts on updates), it programmatically runs:
+   ```bash
+   alembic upgrade head
+   ```
+2. Your Supabase PostgreSQL database tables will automatically build themselves without any manual command execution.
+3. You can verify that all 9 tables were constructed successfully by looking at your Supabase project's **Table Editor** page.
 
 ---
 
