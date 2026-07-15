@@ -14,15 +14,23 @@ logger = logging.getLogger(__name__)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Run database migrations and start/stop scheduler on startup/shutdown."""
+    # 1. Database Migrations
     try:
         logger.info("Initializing database migrations...")
         alembic_cfg = alembic.config.Config("alembic.ini")
         alembic.command.upgrade(alembic_cfg, "head")
         logger.info("Database migrations successfully executed.")
     except Exception as e:
-        logger.error(f"Error executing database migrations on startup: {e}")
+        logger.error(f"Database migrations failed on startup: {e}. Please ensure DATABASE_URL is configured.")
 
-    start_scheduler()
+    # 2. Scheduler
+    try:
+        logger.info("Starting background scheduler...")
+        start_scheduler()
+        logger.info("Background scheduler successfully started.")
+    except Exception as e:
+        logger.error(f"Failed to start scheduler on startup: {e}. Active schedules will not run until resolved.")
+
     yield
     stop_scheduler()
 

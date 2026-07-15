@@ -33,14 +33,21 @@ We deploy the system using a **Render Blueprint** (`render.yaml`), which automat
 ### Step 3: Configure Environment Variables
 While the services are building, configure the necessary keys in the **Render Dashboard**:
 
-1.  Select the **`ai-news-curator-backend`** Web Service.
-2.  Navigate to the **Environment** tab.
-3.  Add the following required variables:
-    *   `DATABASE_URL`: The Supabase URI connection string you copied in Step 1 (with your password filled in).
-    *   `GEMINI_API_KEY`: Your Google GenAI API key.
-    *   `JWT_SECRET_KEY`: A secure random string to sign auth tokens.
-    *   `MY_EMAIL`: The default system email address for SMTP sending fallbacks.
-    *   `APP_PASSWORD`: The corresponding 16-character Google App Password (if using Gmail).
+#### For the Backend (`ai-news-curator-backend` Web Service)
+1. Navigate to the **Environment** tab.
+2. Add the following required variables:
+   *   `DATABASE_URL`: The Supabase URI connection string you copied in Step 1 (with your password filled in).
+   *   `GEMINI_API_KEY`: Your Google GenAI API key.
+   *   `JWT_SECRET_KEY`: A secure random string to sign auth tokens.
+   *   `MY_EMAIL`: The default system email address for SMTP sending fallbacks.
+   *   `APP_PASSWORD`: The corresponding 16-character Google App Password (if using Gmail).
+
+#### For the Frontend (`ai-news-curator-frontend` Static Site)
+1. Copy the **public URL** of your backend Web Service (e.g., `https://ai-news-curator-backend.onrender.com`), visible at the top of your backend's Render page.
+2. Go to the **`ai-news-curator-frontend`** Static Site → **Environment** tab.
+3. Add the following environment variable:
+   *   `VITE_API_URL`: Paste the backend's public URL you copied in step 1.
+4. Trigger a new manual deploy on the frontend to compile it with the backend URL loaded.
 
 ---
 
