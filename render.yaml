@@ -19,7 +19,7 @@ services:
         sync: false
 
   # ── 2. React SPA Frontend ───────────────────────────────────────
-  - type: static
+  - type: web
     name: ai-news-curator-frontend
     env: static
     buildCommand: cd frontend && npm install && npm run build
