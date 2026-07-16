@@ -429,7 +429,7 @@ class Repository:
         Returns article summaries from the last `hours` that have NOT yet
         been sent to this specific user. Used by the per-user curator.
         """
-        cutoff = datetime.now(timezone.utc) - timedelta(hours=hours)
+        cutoff = datetime.utcnow() - timedelta(hours=hours)  # naive UTC to match stored created_at
 
         # IDs already sent to this user
         sent_ids = {
